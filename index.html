@@ -3,9 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
 <title>CENTINELA — Memoria del proyecto</title>
 <meta name="description" content="Memoria del proyecto CENTINELA — AtalaIA Licit@. Premios de la Cátedra de Ciberseguridad a la Innovación en Ciberseguridad e IA, UMA.">
-<script src="./support.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#0B1F1C">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0B1F1C"/>
+    <text x="600" y="460" font-family="Georgia, 'Times New Roman', serif" font-size="300" font-weight="700" fill="#C9A24B" text-anchor="middle">C</text>
+  </svg>
+</template>
 </head>
 <body>
 <x-dc>
@@ -19,6 +25,68 @@
       .no-print { display: none !important; }
     }
   </style>
+  <script>
+    // Keeps the fixed-width A4 sheet fully visible (no horizontal cropping)
+    // on narrow screens by shrinking it to fit the viewport width, like a
+    // page-fit PDF viewer — crisp vector scaling, no reflow, no content lost.
+    (function () {
+      function applyFit() {
+        var dp = document.querySelector('doc-page');
+        if (!dp || !dp.shadowRoot) return;
+        var sheet = dp.shadowRoot.querySelector('.sheet');
+        if (!sheet) return;
+
+        sheet.style.transform = 'none';
+        sheet.style.marginBottom = '';
+        var natural_width = sheet.offsetWidth;
+        var natural_height = sheet.offsetHeight;
+        if (!natural_width || !natural_height) return;
+
+        var gutter = 16;
+        var avail = window.innerWidth - gutter;
+        var scale = Math.min(1, avail / natural_width);
+
+        if (scale >= 0.995) {
+          sheet.style.transform = '';
+          sheet.style.marginBottom = '';
+          document.documentElement.style.overflowX = '';
+          document.body.style.overflowX = '';
+          return;
+        }
+
+        var rect = sheet.getBoundingClientRect();
+        var shift = (window.innerWidth / 2) - rect.left - (natural_width * scale / 2);
+
+        sheet.style.transformOrigin = 'top left';
+        sheet.style.transform = 'translateX(' + shift + 'px) scale(' + scale + ')';
+        sheet.style.marginBottom = (natural_height * scale - natural_height) + 'px';
+        document.documentElement.style.overflowX = 'hidden';
+        document.body.style.overflowX = 'hidden';
+      }
+
+      function waitAndFit(tries) {
+        var dp = document.querySelector('doc-page');
+        if (dp && dp.shadowRoot && dp.shadowRoot.querySelector('.sheet')) {
+          applyFit();
+          return;
+        }
+        if (tries > 0) setTimeout(function () { waitAndFit(tries - 1); }, 150);
+      }
+
+      var resize_timer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resize_timer);
+        resize_timer = setTimeout(applyFit, 150);
+      });
+      window.addEventListener('orientationchange', function () {
+        setTimeout(applyFit, 250);
+      });
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () { setTimeout(applyFit, 50); });
+      }
+      waitAndFit(40);
+    })();
+  </script>
 </helmet>
 
 <x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="1.8cm" hint-size="794px,1123px">
@@ -36,9 +104,14 @@
   <!-- ============ COVER ============ -->
   <section data-screen-label="Portada" style="box-sizing:border-box; width:calc(100% + 2 * 1.8cm); margin:0 -1.8cm 20px; padding:22px 1.8cm; background:#0B1F1C; color:#F2EEE2; break-inside:avoid; font-family:'IBM Plex Sans',sans-serif;">
 
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-      <span style="font-size:8.5pt; letter-spacing:0.16em; text-transform:uppercase; color:#C9A24B;">Memoria del proyecto</span>
-      <span style="font-size:8.5pt; letter-spacing:0.08em; text-transform:uppercase; color:#9db3ab; text-align:right;">Premios de la Cátedra de Ciberseguridad a la Innovación en Ciberseguridad e IA — UMA</span>
+    <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+      <span style="flex:none; white-space:nowrap; font-size:8.5pt; letter-spacing:0.16em; text-transform:uppercase; color:#C9A24B;">Memoria del proyecto</span>
+      <span style="flex:1 1 auto; min-width:200px; font-size:8.5pt; letter-spacing:0.08em; text-transform:uppercase; color:#9db3ab; text-align:right;">Premios de la Cátedra de Ciberseguridad a la Innovación en Ciberseguridad e IA — UMA</span>
+    </div>
+
+    <div style="margin-bottom:16px; padding-bottom:14px; border-bottom:0.75pt solid rgba(201,162,75,0.35);">
+      <p style="margin:0 0 4px 0; font-size:8pt; line-height:1.5; color:#9db3ab;">Resolución de 1 de julio de 2026, del Rectorado de la Universidad de Málaga, por la que se convocan los Premios de la Cátedra de Ciberseguridad a la Innovación en Ciberseguridad e Inteligencia Artificial</p>
+      <p style="margin:0; font-size:8pt; letter-spacing:0.04em; color:#9db3ab;">N.º de Anuncio: 2026/0000000194</p>
     </div>
 
     <div style="display:flex; align-items:center; gap:18px;">
@@ -56,9 +129,9 @@
           <span style="position:absolute; top:0; left:50%; width:1px; height:100%; background:#C9A24B; transform:translateX(-50%);"></span>
           <span style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#C9A24B; transform:translateY(-50%);"></span>
         </span>
-        <a href="https://pacocorreab-ui.github.io/AtalaIA/" style="color:#F2EEE2; text-decoration:underline; text-underline-offset:2px;">https://pacocorreab-ui.github.io/AtalaIA/</a>
+        <a href="https://pacocorreab-ui.github.io/AtalaIA/" style="color:#F2EEE2; text-decoration:none;">https://pacocorreab-ui.github.io/AtalaIA/</a>
       </span>
-      <span style="display:inline-flex; align-items:center; gap:6px;"><span style="color:#C9A24B; font-size:10pt;">✉</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="81e7e2eeafe0efe5f3e4f2e2eef3f3e4e0c1e6ece0e8edafe2eeec">[email&#160;protected]</a></span>
+      <span style="display:inline-flex; align-items:center; gap:6px;"><span style="color:#C9A24B; font-size:10pt;">✉</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a2c4c1cd8cc3ccc6d0c7d1c1cdd0d0c7c3e2c5cfc3cbce8cc1cdcf">[email&#160;protected]</a></span>
       <span style="display:inline-flex; align-items:center; gap:6px;"><span style="color:#C9A24B; font-size:10pt;">☎</span>+34 652 180 277</span>
     </div>
   </section>
@@ -102,7 +175,7 @@
   <h3 style="margin:0 0 10px 0; font-family:'Source Serif 4',serif; font-weight:600; font-size:12.5pt; color:#0B1F1C; text-align:left;">2.1 — El problema de las PYMEs: competir a ciegas contra quien ve</h3>
   <p style="margin:0 0 14px 0;">Cada vez que una PYME de ingeniería decide presentarse a una licitación pública compromete entre 100 y 200 horas de técnicos cualificados en preparar la oferta, tras un análisis preliminar de 2–4 horas por pliego que se pierde por completo si la decisión final es no presentarse. La empresa decide con información incompleta, no mide su tasa real de adjudicación, y el conocimiento generado en cada proceso —ganado o perdido— se archiva sin convertirse en un activo que sirva para la siguiente.</p>
   <p style="margin:0 0 14px 0;">Las grandes empresas tienen departamentos que hacen ese trabajo de forma sistemática. Las administraciones ya evalúan con IA. La PYME está en medio, compitiendo con menos información que ambas. El resultado es una tasa de conversión baja, margen destruido por competir solo en precio, y un reparto de la contratación pública cada vez más concentrado en los grandes actores.</p>
-  <p style="margin:0 0 14px 0;">Una plataforma de inteligencia accesible para la PYME —"la IA del licitador"— cambia esa ecuación: democratiza una capacidad que hoy es privilegio de pocos, mejora la calidad de las decisiones y de las ofertas, y con ello la tasa de conversión de las empresas medianas. Más contratos ganados por PYMEs significa más empleo técnico cualificado en esas empresas y un reparto más equilibrado del mercado público. Ese es el impacto que persigue AtalaIA Licit@.</p>
+  <p style="margin:0 0 14px 0;">Una plataforma de inteligencia accesible para la PYME —"la IA del licitador"— cambia esa ecuación: democratiza una capacidad que hoy es privilegio de pocos, mejora la calidad de las decisiones y de las ofertas, y con ello la tasa de conversión de las empresas medianas y pequeñas. Más contratos ganados por PYMEs significa más empleo técnico cualificado en esas empresas y un reparto más equilibrado del mercado público. Ese es el impacto que persigue AtalaIA Licit@.</p>
 
   <h3 style="margin:0 0 10px 0; font-family:'Source Serif 4',serif; font-weight:600; font-size:12.5pt; color:#0B1F1C; text-align:left;">2.2 — El problema de seguridad: custodiar secretos industriales</h3>
   <p style="margin:0 0 14px 0;">Lo que condiciona todo lo anterior es una pregunta que las plataformas emergentes de esta categoría no han puesto en el centro: <strong>¿qué pasa con la información que las empresas confían al sistema?</strong></p>
@@ -371,7 +444,7 @@
       </a>
     </p>
     <p style="margin:0 0 10px 0; font-size:9.5pt; letter-spacing:0.1em; text-transform:uppercase; color:#C9A24B;">Fundador de AtalaIA Licit@ · responsable del proyecto</p>
-    <p style="margin:0;">Ingeniero Civil e Ingeniero de Organización Industrial, Máster Interuniversitario en Representación y Diseño en Ingeniería y Arquitectura (UMA, 2023), con <strong>Matrícula de Honor en el Trabajo Fin de Máster</strong>. Su vinculación con la Universidad de Málaga es de largo recorrido: estudiante de movilidad internacional en la UMA (curso 2017/2018, beca Santander), becario de apoyo y miembro de la Unidad de Garantía de Calidad del Máster RDIA (2022), y titulado de máster por esta universidad. Más de 10 años en obra pública, los últimos 3 como Senior Project Engineer en consultoría de ingeniería civil en Málaga, con responsabilidad directa en el análisis de pliegos y la preparación de ofertas a administraciones de todos los niveles. Cuenta con formación certificada en Transformación Digital (IA y Big Data) y en dirección de proyectos (PMBOK), trayectoria en programas de innovación (Vodafone Campus Lab: metodologías design thinking, lean y agile), y preparación específica para la gestión empresarial del proyecto: programa Desafío Emprendedor Innovador (EOI, 4ª ed. Málaga) y programa de Creación y Consolidación Empresarial con Herramientas de IA (Fundación INCYDE, 2026), ambos completados. Desde 2024 desarrolla y aplica la metodología de análisis de licitaciones con IA que este proyecto automatiza y protege. Su aportación es triple: el conocimiento del dominio —sabe de primera mano qué información considera crítica una empresa licitadora y por qué desconfiaría de entregarla, y ese conocimiento define los requisitos de protección del sistema—; la metodología validada, el desarrollo del prototipo y la evaluación de la calidad de los resultados; y la dirección del proyecto como fundador de la iniciativa empresarial a la que este prototipo da cimiento. Dedicación diaria en horario de tarde y fines de semana durante todo el periodo.</p>
+    <p style="margin:0;">Ingeniero Civil e Ingeniero de Organización Industrial, Máster Interuniversitario en Representación y Diseño en Ingeniería y Arquitectura (UMA, 2023), con Matrícula de Honor en el Trabajo Fin de Máster. Su vinculación con la Universidad de Málaga es de largo recorrido: estudiante de movilidad internacional en la UMA (curso 2017/2018, beca Santander), becario de apoyo y miembro de la Unidad de Garantía de Calidad del Máster RDIA (2022), y titulado de máster por esta universidad. Más de 10 años en obra pública, los últimos 3 como Senior Project Engineer en consultoría de ingeniería civil en Málaga, con responsabilidad directa en el análisis de pliegos y la preparación de ofertas a administraciones de todos los niveles. Cuenta con formación certificada en Transformación Digital (IA y Big Data) y en dirección de proyectos (PMBOK), trayectoria en programas de innovación (Vodafone Campus Lab: metodologías design thinking, lean y agile), y preparación específica para la gestión empresarial del proyecto: <strong>programa Desafío Emprendedor Innovador (EOI, 4ª ed. Málaga)</strong> y <strong>programa de Creación y Consolidación Empresarial con Herramientas de IA (Fundación INCYDE, 2026)</strong>, ambos completados. Desde 2024 desarrolla y aplica la metodología de análisis de licitaciones con IA que este proyecto automatiza y protege. Su aportación es triple: el conocimiento del dominio —sabe de primera mano qué información considera crítica una empresa licitadora y por qué desconfiaría de entregarla, y ese conocimiento define los requisitos de protección del sistema—; la metodología validada, el desarrollo del prototipo y la evaluación de la calidad de los resultados; y la dirección del proyecto como fundador de la iniciativa empresarial a la que este prototipo da cimiento. Dedicación diaria en horario de tarde y fines de semana durante todo el periodo.</p>
   </div>
 
   <div style="height:0.75pt; background:#D8D2C2; margin:0 0 22px 0;"></div>
@@ -385,10 +458,10 @@
       </a>
     </p>
     <p style="margin:0 0 10px 0; font-size:9.5pt; letter-spacing:0.1em; text-transform:uppercase; color:#C9A24B;">Partner estratégico técnico</p>
-    <p style="margin:0;">Estudiante de último curso del Grado en Ingeniería de Telecomunicaciones, especialidad en Sonido e Imagen (UMA, ETSIT), con la totalidad de las asignaturas superadas y el Trabajo Fin de Grado en curso (presentación prevista: septiembre de 2026): <em>"Desarrollo e implementación de un sistema predictor de ubicación mediante señales 4G, 5G y WiFi, usando algoritmos basados en Machine Learning"</em> — experiencia práctica directa en la aplicación de aprendizaje automático, la otra mitad de la convergencia que persigue esta convocatoria. Programa en Python (aplicado en comunicaciones digitales y en su TFG), C++ y C. Trabaja actualmente en el laboratorio de Radiofrecuencia de Dekra Testing and Certification, un entorno profesional de ensayo, medición y certificación cuya cultura de "probar antes de dar por bueno" es exactamente la que CENTINELA aplica a la seguridad. Certificación Cambridge English B2, útil para las sesiones de mentoría. Su incorporación responde a una decisión deliberada del fundador: complementar el dominio del negocio con capacidad de ingeniería TIC. En el proyecto asume la revisión técnica del prototipo, el diseño y ejecución de las pruebas (ficheros de test, detección de contenido oculto, validación de hitos) y la producción audiovisual de la demostración, con dedicación flexible compatible con su actividad profesional.</p>
+    <p style="margin:0;">Estudiante de último curso del Grado en Ingeniería de Telecomunicaciones, especialidad en Sonido e Imagen (UMA, ETSIT), con la totalidad de las asignaturas superadas y el Trabajo Fin de Grado en curso (presentación prevista: septiembre de 2026): <strong style="color:#0B1F1C;">"Desarrollo e implementación de un sistema predictor de ubicación mediante señales 4G, 5G y WiFi, usando algoritmos basados en Machine Learning"</strong> — experiencia práctica directa en la aplicación de aprendizaje automático, la otra mitad de la convergencia que persigue esta convocatoria. Programa en Python (aplicado en comunicaciones digitales y en su TFG), C++ y C. Trabaja actualmente en el laboratorio de Radiofrecuencia de Dekra Testing and Certification, un entorno profesional de ensayo, medición y certificación cuya cultura de "probar antes de dar por bueno" es exactamente la que CENTINELA aplica a la seguridad. Certificación Cambridge English B2. Su incorporación responde a una decisión deliberada del fundador: complementar el dominio del negocio con capacidad de ingeniería TIC. En el proyecto asume la revisión técnica del prototipo, el diseño y ejecución de las pruebas (ficheros de test, detección de contenido oculto, validación de hitos) y la producción audiovisual de la demostración, con dedicación flexible compatible con su actividad profesional.</p>
   </div>
 
-  <blockquote style="margin:0; padding:2px 0 2px 18px; border-left:3px solid #C9A24B; font-family:'Source Serif 4',serif; font-style:italic; font-size:11pt; line-height:1.4; color:#0B1F1C;">La complementariedad es la tesis del equipo: el fundador aporta el problema real, la metodología validada y el criterio del sector; el partner técnico aporta formación TIC, experiencia práctica en Machine Learning y cultura profesional de ensayo y certificación. El equipo declara con honestidad que no cuenta con especialización formal previa en ciberseguridad: precisamente por eso el proyecto la aborda como su objeto central, acotada a prácticas concretas y bien establecidas de la industria, y con la mentoría de GSEC aplicada exactamente donde más valor aporta. Aprender ciberseguridad aplicada construyendo un sistema real que la necesita —y del que depende la viabilidad de una iniciativa empresarial en marcha— es, entendemos, el espíritu de esta convocatoria.</blockquote>
+  <blockquote style="margin:0; padding:2px 0 2px 18px; border-left:3px solid #C9A24B; font-family:'Source Serif 4',serif; font-style:italic; font-size:11pt; line-height:1.4; color:#0B1F1C;">La complementariedad es la tesis del equipo: el fundador aporta el problema real, la metodología validada y el criterio del sector; el partner técnico aporta formación TIC, experiencia práctica en Machine Learning y cultura profesional de ensayo y certificación. El equipo declara con honestidad que no cuenta con especialización formal previa en ciberseguridad: precisamente por eso el proyecto la aborda como su objeto central, acotada a prácticas concretas y bien establecidas de la industria, y con la mentoría de GSEC aplicada exactamente donde más valor aporta. <strong>Aprender ciberseguridad aplicada construyendo un sistema real que la necesita</strong> —y del que depende la viabilidad de una iniciativa empresarial en marcha— es, entendemos, el espíritu de esta convocatoria.</blockquote>
   </section>
 
   <!-- ============ SECTION 10 ============ -->
@@ -400,8 +473,8 @@
   <h2 style="margin:0 0 12px 0; font-family:'Source Serif 4',serif; font-weight:700; font-size:17pt; color:#0B1F1C; text-align:left;">Impacto potencial, escalabilidad y transferencia</h2>
 
   <ul style="margin:0; padding-left:18px;">
-    <li style="margin-bottom:12px;"><strong>Democratización de una capacidad hoy reservada a las grandes empresas.</strong> El mercado español de contratación pública en consultoría e ingeniería supera los 30.000 M€ anuales. Las grandes compañías analizan ese mercado con equipos y sistemas propios; las PYMEs, no. AtalaIA Licit@ pone esa inteligencia al alcance de la empresa mediana, y CENTINELA es lo que la hace confiable. El prototipo de este premio no termina en agosto: es el cimiento tecnológico de una iniciativa empresarial con plan de negocio completo, segmento objetivo definido (PYMEs andaluzas de ingeniería civil) y continuidad inmediata — en septiembre de 2026 el proyecto entra en el programa de preincubación Coworking DeepTech (EOI–PROMÁLAGA, Polo Digital de Málaga), de cinco meses de duración y con cierre en un Demo Day ante inversores. El proyecto queda así arraigado de principio a fin en el ecosistema tecnológico malagueño: GSEC en verano, Polo Digital desde septiembre.</li>
-    <li style="margin-bottom:12px;"><strong>Impacto económico y social en cadena.</strong> Mejores decisiones de presentación y mejores ofertas elevan la tasa de conversión de las PYMEs; más contratos adjudicados a empresas medianas significan más empleo técnico cualificado en el tejido productivo local y un reparto más equilibrado de la contratación pública entre grandes empresas y PYMEs — más competencia real, en beneficio también de la propia administración contratante.</li>
+    <li style="margin-bottom:12px;"><strong>Democratización de una capacidad hoy reservada a las grandes empresas.</strong> El mercado español de contratación pública en consultoría e ingeniería supera los 30.000 M€ anuales. Las grandes compañías analizan ese mercado con equipos y sistemas propios; las PYMEs, no. AtalaIA Licit@ pone esa inteligencia al alcance de la empresa mediana y pequeña, y CENTINELA es lo que la hace confiable. El prototipo de este premio no termina en agosto: es el cimiento tecnológico de una iniciativa empresarial con plan de negocio completo, segmento objetivo definido (PYMEs andaluzas de ingeniería civil) y continuidad inmediata — en septiembre de 2026 el proyecto entra en el programa de preincubación Coworking DeepTech (EOI–PROMÁLAGA, Polo Digital de Málaga), de cinco meses de duración y con cierre en un Demo Day ante inversores. El proyecto queda así arraigado de principio a fin en el ecosistema tecnológico malagueño: GSEC en verano, Polo Digital desde septiembre.</li>
+    <li style="margin-bottom:12px;"><strong>Impacto económico y social en cadena.</strong> Mejores decisiones de presentación y mejores ofertas elevan la tasa de conversión de las PYMEs; más contratos adjudicados a empresas medianas y pequeñas significan más empleo técnico cualificado en el tejido productivo local y un reparto más equilibrado de la contratación pública entre grandes empresas y PYMEs — más competencia real, en beneficio también de la propia administración contratante.</li>
     <li style="margin-bottom:12px;"><strong>La seguridad como ventaja competitiva, no como coste.</strong> En un sector cuya principal barrera de adopción tecnológica es la desconfianza, poder demostrar a un cliente cómo se guarda su información, qué sale del sistema y cómo se ha puesto a prueba el anonimizado convierte la ciberseguridad en el argumento comercial diferencial frente a los actores generalistas.</li>
     <li><strong>Transferencia directa a otros sectores.</strong> El patrón de CENTINELA —entrada segura de documentos, guardado separado y cifrado, control de lo que se envía a servicios de IA, anonimizado verificado— es el que necesita cualquier plataforma vertical de IA que trabaje con información confidencial de empresas: asesoría legal, financiera, sanitaria, industrial. El problema que resuelve es general; la licitación pública es el caso concreto que lo demuestra.</li>
   </ul>
@@ -422,7 +495,7 @@
         </span>
         <a href="https://pacocorreab-ui.github.io/AtalaIA/" style="color:#F2EEE2; text-decoration:none;">https://pacocorreab-ui.github.io/AtalaIA/</a>
       </span>
-      <span style="display:inline-flex; align-items:center; gap:5px;"><span style="color:#C9A24B;">✉</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="563035397837383224332535392424333716313b373f3a7835393b">[email&#160;protected]</a></span>
+      <span style="display:inline-flex; align-items:center; gap:5px;"><span style="color:#C9A24B;">✉</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c4a2a7abeaa5aaa0b6a1b7a7abb6b6a1a584a3a9a5ada8eaa7aba9">[email&#160;protected]</a></span>
       <span style="display:inline-flex; align-items:center; gap:5px;"><span style="color:#C9A24B;">☎</span>+34 652 180 277</span>
     </p>
   </section>

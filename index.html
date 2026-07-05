@@ -131,7 +131,7 @@
         </span>
         <a href="https://pacocorreab-ui.github.io/AtalaIA/" style="color:#F2EEE2; text-decoration:none;">https://pacocorreab-ui.github.io/AtalaIA/</a>
       </span>
-      <span style="display:inline-flex; align-items:center; gap:6px;"><span style="color:#C9A24B; font-size:10pt;">✉</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a2c4c1cd8cc3ccc6d0c7d1c1cdd0d0c7c3e2c5cfc3cbce8cc1cdcf">[email&#160;protected]</a></span>
+      <span style="display:inline-flex; align-items:center; gap:6px;"><span style="color:#C9A24B; font-size:10pt;">✉</span>{{ contactEmail }}</span>
       <span style="display:inline-flex; align-items:center; gap:6px;"><span style="color:#C9A24B; font-size:10pt;">☎</span>+34 652 180 277</span>
     </div>
   </section>
@@ -495,7 +495,7 @@
         </span>
         <a href="https://pacocorreab-ui.github.io/AtalaIA/" style="color:#F2EEE2; text-decoration:none;">https://pacocorreab-ui.github.io/AtalaIA/</a>
       </span>
-      <span style="display:inline-flex; align-items:center; gap:5px;"><span style="color:#C9A24B;">✉</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c4a2a7abeaa5aaa0b6a1b7a7abb6b6a1a584a3a9a5ada8eaa7aba9">[email&#160;protected]</a></span>
+      <span style="display:inline-flex; align-items:center; gap:5px;"><span style="color:#C9A24B;">✉</span>{{ contactEmail }}</span>
       <span style="display:inline-flex; align-items:center; gap:5px;"><span style="color:#C9A24B;">☎</span>+34 652 180 277</span>
     </p>
   </section>
@@ -505,6 +505,14 @@
 </x-import>
 
 </x-dc>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/x-dc" data-dc-script data-props="{}"></script>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals() {
+    var user = ['f', 'c', 'o', '.', 'a', 'n', 'd', 'r', 'e', 's', 'c', 'o', 'r', 'r', 'e', 'a'].join('');
+    var host = ['g', 'm', 'a', 'i', 'l', '.', 'c', 'o', 'm'].join('');
+    return { contactEmail: user + '@' + host };
+  }
+}
+</script>
 </body>
 </html>
